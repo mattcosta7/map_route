@@ -25,9 +25,9 @@ function findPointNear(resp,dist){
       console.log(steps[i].end_location);
       out = steps[i].end_location;
       var infowindow = new google.maps.InfoWindow({
-        content: dist+" From Origin"
+        content: dist+"meters From Origin"
       });
-      var marker = new google.maps.Marker({
+       var marker = new google.maps.Marker({
         position: steps[i].end_location,
         map: map,
         icon: {
@@ -41,7 +41,7 @@ function findPointNear(resp,dist){
       marker.addListener('click',function(){
         infowindow.open(map,marker);
       })
-    break;
+      return marker.getPosition();
     }
   }
   
@@ -57,7 +57,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
     if (status === google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
       distance = document.getElementById('distance').innerHTML;
-      findPointNear(response,parseFloat(distance));
+      waypoint = findPointNear(response,parseFloat(distance));
     } else {
       window.alert('Directions request failed due to ' + status);
     }
