@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  address_1: MyString
+  address_2: MyString
+  lat1: 1.5
+  lng1: 1.5
+  lat2: 1.5
+  lng2: 1.5
+  distance_traveled: 1.5
+
+two:
+  address_1: MyString
+  address_2: MyString
+  lat1: 1.5
+  lng1: 1.5
+  lat2: 1.5
+  lng2: 1.5
+  distance_traveled: 1.5

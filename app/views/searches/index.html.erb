@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Search History</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Address 1</th>
+      <th>Address 2</th>
+      <th>Lat1</th>
+      <th>Lng1</th>
+      <th>Lat2</th>
+      <th>Lng2</th>
+      <th>Distance traveled</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @searches.each do |search| %>
+      <tr>
+        <td><%= search.address_1 %></td>
+        <td><%= search.address_2 %></td>
+        <td><%= search.lat1 %></td>
+        <td><%= search.lng1 %></td>
+        <td><%= search.lat2 %></td>
+        <td><%= search.lng2 %></td>
+        <td><%= search.distance_traveled %></td>
+        <td><%= link_to 'Show', search %></td>
+        <td><%= link_to 'Edit', edit_search_path(search) %></td>
+        <td><%= link_to 'Destroy', search, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Search', new_search_path %>
