@@ -1,50 +1,9 @@
 function initMap() {
   var directionsService = new google.maps.DirectionsService;
   var directionsDisplay = new google.maps.DirectionsRenderer;
-  map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 7,
-    center: {
-      lat: parseFloat(document.getElementById('search_lat1').innerHTML),
-      lng: parseFloat(document.getElementById('search_lng1').innerHTML)
-    }
-  });
-  directionsDisplay.setMap(map);
+  map = new google.maps.Map(document.getElementById('map'), {});
 
   calculateAndDisplayRoute(directionsService, directionsDisplay);
-}
-
-function findPointNear(resp,dist){
-  distance = dist;
-  var count = 0;
-  var steps = resp.routes[0].legs[0].steps
-  for(var i = 0; i < steps.length; i++){
-    if(distance >= count + steps[i].distance.value){
-      count += steps[i].distance.value;
-    }
-    else{
-      console.log(steps[i].end_location);
-      out = steps[i].end_location;
-      var infowindow = new google.maps.InfoWindow({
-        content: dist+"meters From Origin"
-      });
-       var marker = new google.maps.Marker({
-        position: steps[i].end_location,
-        map: map,
-        icon: {
-          url: window.location.origin + '/assets/face.jpg',
-          size: new google.maps.Size(20, 32),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(0, 32)
-        },
-        title: dist+"meters From Origin"
-      });
-      marker.addListener('click',function(){
-        infowindow.open(map,marker);
-      })
-      return marker.getPosition();
-    }
-  }
-  
 }
 
 function calculateAndDisplayRoute(directionsService, directionsDisplay) {
@@ -55,9 +14,43 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
   }, function(response, status) {
     data = response;
     if (status === google.maps.DirectionsStatus.OK) {
-      directionsDisplay.setDirections(response);
-      distance = document.getElementById('distance').innerHTML;
-      waypoint = findPointNear(response,parseFloat(distance));
+      var distance = parseFloat(document.getElementById('distance').innerHTML);
+      
+      var polylineToPoint = new google.maps.Polyline({
+        path: [],
+        strokeColor: '#FF0000',
+        strokeWeight: 3
+      });
+      var polylineFromPoint = new google.maps.Polyline({
+        path: [],
+        strokeColor: '#00FF00',
+        strokeWeight: 3
+      });
+
+      var bounds = new google.maps.LatLngBounds();
+      var distanceCovered = 0
+      var legs = response.routes[0].legs;
+      for (i=0;i<legs.length;i++) {
+        var steps = legs[i].steps;
+        for (j=0;j<steps.length;j++) {
+          var nextSegment = steps[j].path;
+          distanceCovered += steps[j].distance.value;
+          for (k=0;k<nextSegment.length;k++) {
+            if(distanceCovered <= distance){
+              polylineToPoint.getPath().push(nextSegment[k]);
+              bounds.extend(nextSegment[k]);
+            }
+            else{
+              polylineFromPoint.getPath().push(nextSegment[k]);
+              bounds.extend(nextSegment[k]);
+            }
+          }
+        }
+      }
+
+      polylineToPoint.setMap(map);
+      polylineFromPoint.setMap(map);
+      map.fitBounds(bounds);
     } else {
       window.alert('Directions request failed due to ' + status);
     }
