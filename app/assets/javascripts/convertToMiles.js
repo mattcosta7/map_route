@@ -1,17 +1,19 @@
-function convertToMiles(meters){
-  return meters/1609.34 
+function getMiles(i) {
+  return i*0.000621371192;
+}
+function getMeters(i) {
+  return i*1609.344;
 }
 
-function convertToMeters(miles){
-  return miles*1609.34
-}
-
-function converter(){
-  document.getElementById('search_distance_traveled').addEventListener('change',function(){
-    document.getElementById('distance_in_miles').value = parseFloat(convertToMiles(document.getElementById('search_distance_traveled').value))
+$('#new_search').ready(function(){
+  $('#search_distance_traveled').on('keyup',function(){
+    value = $(this).val()
+    $('#distance_in_miles').val(getMiles(value))
   })
 
-  document.getElementById('distance_in_miles').addEventListener('change',function(){
-      document.getElementById('search_distance_traveled').value = parseFloat(convertToMeters(document.getElementById('distance_in_miles').value))
+  $('#distance_in_miles').on('keyup',function(){
+    value = $(this).val()
+    $('#search_distance_traveled').val(getMeters(value))
+
   })
-}
+})

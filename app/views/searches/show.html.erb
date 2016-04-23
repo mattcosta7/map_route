@@ -1,10 +1,25 @@
 <div id="floating-panel">
-<b>Start: <%=@search.address_1%></b><br>
-<b>End: <%=@search.address_2%></b><br>
-<b>Distance Traveled: <%=@search.distance_traveled%> Meters</b><br>
-<%= link_to 'Edit', edit_search_path(@search) %> |
-<%= link_to 'Back', searches_path %>
+  <p>
+    Start: <%=@search.address_1%>
+  </p>
+  <p>
+    End: <%=@search.address_2%>
+  <p>
+  <p>
+    Total Distance: <span id='distance_placeholder'></span> meters | <span id='distance_placeholder_2'></span> 
+  </p>
+  <p>
+    Distance To Travel: <span id='distance_to_travel'></span> meters | <span id='distance_to_travel_2'></span> 
+  </p>
+  <% if @search.distance_traveled.present? %>
+    <p>Distance Traveled: <%=@search.distance_traveled_neat%> meters | <%=@search.distance_traveled_miles_neat%> miles<p>
+  <% else %>
+    <p>No Distance Provided In Search</p>
+  <%end%>
+  <%= link_to 'Edit Search', edit_search_path(@search) %>
+  <%= link_to 'New Search', new_search_path %>
 </div>
+
 <div id="map"></div>
 <script src='/javascripts/map.js'></script>
 <script async defer
