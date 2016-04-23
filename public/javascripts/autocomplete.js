@@ -45,7 +45,7 @@ onload=function(){
       document.getElementById('search_lng1').value = place.geometry.location.lng();
   });
   google.maps.event.addListener(autocomplete2, 'place_changed', function () {
-      var place = autocomplete.getPlace(); 
+      var place = autocomplete2.getPlace(); 
       document.getElementById('search_lat2').value = place.geometry.location.lat();
       document.getElementById('search_lng2').value = place.geometry.location.lng();
 

@@ -10,6 +10,10 @@ class SearchesController < ApplicationController
   # GET /searches/1
   # GET /searches/1.json
   def show
+    respond_to do |format|
+      format.json {render json: @search}
+      format.html
+    end
   end
 
   # GET /searches/new
