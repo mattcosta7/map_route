@@ -67,21 +67,24 @@ function calculateAndDisplayRoute(origin, destination,distance_traveled,directio
       });
 
       var bounds = new google.maps.LatLngBounds();
-      var distanceCovered = 0
+       distanceCovered = 0
       var steps = response.routes[0].legs[0].steps;
 
       for (j=0;j<steps.length;j++) {
         var nextPathPart = steps[j].path;
-        distanceCovered += steps[j].distance.value;
-        
         for (k=0;k<nextPathPart.length;k++) {
+          if(k<nextPathPart.length-1){
+            var path_origin = nextPathPart[k]
+            var dest_path = nextPathPart[k+1]
+            distanceCovered += google.maps.geometry.spherical.computeDistanceBetween(path_origin,dest_path)
+          }
           if(distanceCovered <= distance){
             polylineToPoint.getPath().push(nextPathPart[k]);
           }
           else{
             if(polylineFromPoint.getPath().length == 0){
               var marker = new google.maps.Marker({
-                position: steps[j].start_location,
+                position: path_origin,
                 map: map,
                 title: "Point Traveled To",
                 label: "P"
