@@ -12,3 +12,5 @@ Use the Google Maps API to draw maps with routes between two points and show pro
 * Display the numeric value of the overall distance, distance covered, and distance left.
 
 Uses Google Maps, Geometry, Places, Autocomplete APIs
+
+![inline](./public/MapMyRoute.png)

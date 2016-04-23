@@ -46,9 +46,7 @@ function calculateAndDisplayRoute(origin, destination,distance_traveled,directio
       //use the paths of each step to draw route
       document.getElementById('distance_placeholder').innerHTML = totalDist.value
       document.getElementById('distance_placeholder_2').innerHTML = totalDist.text +"les"
-
-      document.getElementById('distance_to_travel').innerHTML =
-       totalDist.value > distance_traveled ? (totalDist.value - distance_traveled) : 'nil';
+      document.getElementById('distance_to_travel').innerHTML = totalDist.value > distance_traveled ? (totalDist.value - distance_traveled) : 'nil';
       document.getElementById('distance_to_travel_2').innerHTML = (totalDist.value > distance_traveled ? (Math.round(getMiles(totalDist.value - distance_traveled),5) + " miles") : "passed your destination, dude");
 
       var steps = response.routes[0].legs[0].steps;
@@ -86,7 +84,7 @@ function plotMap(steps,distance_traveled){
   });
 
   var bounds = new google.maps.LatLngBounds();
-  distanceCovered = 0
+  distanceCovered = 0;
   for (j=0;j<steps.length;j++) {
     var nextPathPart = steps[j].path;
     for (k=0;k<nextPathPart.length;k++) {
