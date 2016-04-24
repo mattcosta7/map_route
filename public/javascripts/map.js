@@ -100,6 +100,14 @@ function plotMap(steps,distanceTraveled){
         }
         distanceCovered += distToCover;
       }
+      else{
+        if(distanceCovered >= distanceTraveled){
+          polylineFromPoint.getPath().push(nextPathPart[k]);
+        }
+        else{
+          polylineToPoint.getPath().push(nextPathPart[k]);
+        }
+      }
       bounds.extend(nextPathPart[k]);
     }
   }
