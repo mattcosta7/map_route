@@ -8,20 +8,13 @@ function initMap() {
       var distanceTraveled = response.distance_traveled;
       
       map = new google.maps.Map(document.getElementById('map'), {});
-      
-      var originMarker = new google.maps.Marker({
-          position: origin,
-          title:"Hello World!",
-          map: map,
-          label: "O"
-      });
-      var destinationMarker = new google.maps.Marker({
-          position: destination,
-          title:"Hello World!",
-          map: map,
-          label: "D"
-      });
+      infowindow = new google.maps.InfoWindow();
+      placeMarker(origin,"origin");
+      placeMarker(destination,"destination");
+
       calculateAndDisplayRoute(origin,destination,distanceTraveled);
+
+
     }
   });
 }
@@ -36,14 +29,11 @@ function calculateAndDisplayRoute(origin, destination,distanceTraveled) {
   directionsService.route(routeOptions, function(response, status) {
     if (status === google.maps.DirectionsStatus.OK) {
       var totalRouteDistance = response.routes[0].legs[0].distance
-
       updateDisplay(totalRouteDistance, distanceTraveled);
-
       var steps = response.routes[0].legs[0].steps;
-
       plotMap(steps, distanceTraveled);
-
-    } else {
+    } 
+    else {
       window.alert('Directions request failed due to ' + status);
     }
   });
@@ -91,7 +81,7 @@ function plotMap(steps,distanceTraveled){
 
           var interp_result = google.maps.geometry.spherical.interpolate(path_origin,dest_path, percentToTravel);
 
-          placeMarker(interp_result);
+          placeMarker(interp_result, 'point', distanceCovered);
           polylineToPoint.getPath().push(interp_result);
           polylineFromPoint.getPath().push(interp_result);
           }
@@ -116,19 +106,38 @@ function plotMap(steps,distanceTraveled){
   map.fitBounds(bounds);
 }
 
-function placeMarker(location){
+function placeMarker(location,type,dist=null){
+  if(type=="point"){
+    options = {
+      icon: {
+        url: window.location.origin + '/assets/face.jpg',
+        size: new google.maps.Size(20, 32),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(0, 32)
+      },
+      title: "Point " + String(dist) + " meters from origin",
+    }
+  }
+  else{
+    options = {
+      label: type[0],
+      title: type
+    }
+  }
   var marker = new google.maps.Marker({
     position: location,
     map: map,
-    title: "Point Traveled To",
-    icon: {
-      url: window.location.origin + '/assets/face.jpg',
-      size: new google.maps.Size(20, 32),
-      origin: new google.maps.Point(0, 0),
-      anchor: new google.maps.Point(0, 32)
-    },
+    
+    animation: google.maps.Animation.DROP,
+    options
+  });
+   google.maps.event.addListener(marker, 'click', function(){
+    infowindow.close(); // Close previously opened infowindow
+    infowindow.setContent(this.title);
+    infowindow.open(map, marker);
   });
 }
+
 
 function updateDisplay(totalDist, distanceTraveled){
   document.getElementById('distance_placeholder').innerHTML = totalDist.value;
