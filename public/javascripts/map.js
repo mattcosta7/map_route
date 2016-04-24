@@ -105,7 +105,12 @@ function plotMap(steps,distance_traveled){
             position: interp_result,
             map: map,
             title: "Point Traveled To",
-            label: "X"
+            icon: {
+              url: window.location.origin + '/assets/face.jpg',
+              size: new google.maps.Size(20, 32),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(0, 32)
+            },
           });
           polylineToPoint.getPath().push(interp_result);
           polylineFromPoint.getPath().push(interp_result);
