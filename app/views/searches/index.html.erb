@@ -2,6 +2,11 @@
 
 <h1>Search History</h1>
 
+<button id='show_button' class='waves-effect waves-light btn deep-orange darken-4'>Show Search Form</button>
+<div id='form_on_index'>
+  <%= render partial: 'searches/form' %>
+</div>
+
 <table>
   <thead>
     <tr>
@@ -26,9 +31,9 @@
         <td><%= search.lat2 %></td>
         <td><%= search.lng2 %></td>
         <td><%= search.distance_traveled %></td>
-        <td><%= link_to 'Show', search %></td>
-        <td><%= link_to 'Edit', edit_search_path(search) %></td>
-        <td><%= link_to 'Destroy', search, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', search, class: "waves-effect waves-light btn" %></td>
+        <td><%= link_to 'Edit', edit_search_path(search), class: "waves-effect waves-light btn orange" %></td>
+        <td><%= link_to 'Destroy', search, method: :delete, data: { confirm: 'Are you sure?' }, class: "waves-effect waves-light btn red" %></td>
       </tr>
     <% end %>
   </tbody>
@@ -36,4 +41,4 @@
 
 <br>
 
-<%= render partial: 'searches/form' %>
+

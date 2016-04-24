@@ -1,43 +1,50 @@
-<%= form_for(@search ||= Search.new) do |f| %>
-  <% if @search.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@search.errors.count, "error") %> prohibited this search from being saved:</h2>
+<div class='row'>
+  <%= form_for(@search ||= Search.new, class: 'col s12') do |f| %>
+    <% if @search.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@search.errors.count, "error") %> prohibited this search from being saved:</h2>
 
-      <ul>
-      <% @search.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+        <ul>
+        <% @search.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="row">
+      <div class="input-field col s12">
+        <%= f.label :"Origin_Point" %><br>
+        <%= f.text_field :address_1, :required => true %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <%= f.label :address_2 %><br>
+        <%= f.text_field :address_2, :required => true %>
+      </div>
+    </div>
+      <%= f.hidden_field :lat1 %>
+      <%= f.hidden_field :lng1 %>
+      <%= f.hidden_field :lat2 %>
+      <%= f.hidden_field :lng2 %>
+    </div>
+    <div class="row" onload='converter()'>
+      <div class="input-field col s6">
+        <%= f.label :distance_traveled_in_meters %><br>
+        <%= f.text_field :distance_traveled %> 
+      </div>
+      <div class="input-field col s6"> 
+        <%= f.label :distance_traveled_in_miles %> <br>
+        <%= text_field_tag :distance_in_miles %>
+      </div>
+    </div>
+
+    <div class="actions">
+      <%= f.submit %>
     </div>
   <% end %>
+</div>
 
-  <div class="field">
-    <%= f.label :address_1 %><br>
-    <%= f.text_field :address_1 %>
-  </div>
-  <div class="field">
-    <%= f.label :address_2 %><br>
-    <%= f.text_field :address_2 %>
-  </div>
-  <div class="field">
-    <%= f.hidden_field :lat1 %>
-  </div>
-  <div class="field">
-    <%= f.hidden_field :lng1 %>
-  </div>
-  <div class="field">
-    <%= f.hidden_field :lat2 %>
-  </div>
-  <div class="field">
-    <%= f.hidden_field :lng2 %>
-  </div>
-  <div class="field" onload='converter()'>
-    <%= f.label :distance_traveled_in_meters %> | <%= f.label :distance_traveled_in_miles %><br> 
-    <%= f.text_field :distance_traveled %> | <%= text_field_tag :distance_in_miles %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
-<script src="https://maps.googleapis.com/maps/api/js?&libraries=places"></script>
+<script src="https://maps.googleapis.com/maps/api/js?&key=<%=Rails.application.secrets.gmaps_key%>&libraries=places&callback=initAutocomplete" async defer></script>
 <script src='/javascripts/autocomplete.js'></script>

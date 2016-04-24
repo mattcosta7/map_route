@@ -12,13 +12,25 @@ function initAutocomplete() {
   // Create the autocomplete object, restricting the search to geographical
   // location types.
   autocomplete = new google.maps.places.Autocomplete(
-      /** @type {!HTMLInputElement} */(document.getElementById('search_address_1')),
-      {types: ['geocode']});
+    document.getElementById('search_address_1'),
+      {types: ['geocode']}
+    );
   autocomplete2 = new google.maps.places.Autocomplete(
-      /** @type {!HTMLInputElement} */(document.getElementById('search_address_2')),
-      {types: ['geocode']});
-}
+    document.getElementById('search_address_2'),
+      {types: ['geocode']}
+    );
+  google.maps.event.addListener(autocomplete, 'place_changed', function () {
+      var place = autocomplete.getPlace(); 
+      document.getElementById('search_lat1').value = place.geometry.location.lat();
+      document.getElementById('search_lng1').value = place.geometry.location.lng();
+  });
+  google.maps.event.addListener(autocomplete2, 'place_changed', function () {
+      var place = autocomplete2.getPlace(); 
+      document.getElementById('search_lat2').value = place.geometry.location.lat();
+      document.getElementById('search_lng2').value = place.geometry.location.lng();
 
+  });
+}
 
 function geolocate() {
   if (navigator.geolocation) {
@@ -36,18 +48,3 @@ function geolocate() {
   }
 }
 
-
-onload=function(){
-  initAutocomplete();
-  google.maps.event.addListener(autocomplete, 'place_changed', function () {
-      var place = autocomplete.getPlace(); 
-      document.getElementById('search_lat1').value = place.geometry.location.lat();
-      document.getElementById('search_lng1').value = place.geometry.location.lng();
-  });
-  google.maps.event.addListener(autocomplete2, 'place_changed', function () {
-      var place = autocomplete2.getPlace(); 
-      document.getElementById('search_lat2').value = place.geometry.location.lat();
-      document.getElementById('search_lng2').value = place.geometry.location.lng();
-
-  });
-}
