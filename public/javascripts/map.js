@@ -3,16 +3,12 @@ function initMap() {
     url: window.location.pathname,
     method: 'get',
     success:function(response){
-      resp = response;
-
-      var directionsService = new google.maps.DirectionsService;
-      var directionsDisplay = new google.maps.DirectionsRenderer;
+      var origin = {lat: response.lat1, lng: response.lng1};
+      var destination = {lat: response.lat2, lng: response.lng2};
+      var distanceTraveled = response.distance_traveled;
+      
       map = new google.maps.Map(document.getElementById('map'), {});
-
-      var origin = {lat: resp.lat1, lng: resp.lng1};
-      var destination = {lat: resp.lat2, lng: resp.lng2};
-      var distanceTraveled = resp.distance_traveled;
-
+      
       var originMarker = new google.maps.Marker({
           position: origin,
           title:"Hello World!",
@@ -25,40 +21,35 @@ function initMap() {
           map: map,
           label: "D"
       });
-
-      calculateAndDisplayRoute(origin,destination,distanceTraveled,directionsService, directionsDisplay);
+      calculateAndDisplayRoute(origin,destination,distanceTraveled);
     }
-
   });
-  
 }
 
-function calculateAndDisplayRoute(origin, destination,distance_traveled,directionsService, directionsDisplay) {
-  //get directions made
-  directionsService.route({
+function calculateAndDisplayRoute(origin, destination,distanceTraveled) {
+  var directionsService = new google.maps.DirectionsService;
+  var routeOptions = {
     origin: origin,
     destination: destination,
     travelMode: google.maps.TravelMode.DRIVING
-  }, function(response, status) {
+  }
+  directionsService.route(routeOptions, function(response, status) {
     if (status === google.maps.DirectionsStatus.OK) {
-      totalDist = response.routes[0].legs[0].distance
-      //get steps of directions
-      //use the paths of each step to draw route
-      document.getElementById('distance_placeholder').innerHTML = totalDist.value
-      document.getElementById('distance_placeholder_2').innerHTML = totalDist.text +"les"
-      document.getElementById('distance_to_travel').innerHTML = totalDist.value > distance_traveled ? (totalDist.value - distance_traveled) : 'nil';
-      document.getElementById('distance_to_travel_2').innerHTML = (totalDist.value > distance_traveled ? (Math.round(getMiles(totalDist.value - distance_traveled),5) + " miles") : "passed your destination, dude");
+      var totalRouteDistance = response.routes[0].legs[0].distance
+
+      updateDisplay(totalRouteDistance, distanceTraveled);
 
       var steps = response.routes[0].legs[0].steps;
 
-      plotMap(steps, distance_traveled);
+      plotMap(steps, distanceTraveled);
+
     } else {
       window.alert('Directions request failed due to ' + status);
     }
   });
 }
 
-function plotMap(steps,distance_traveled){
+function plotMap(steps,distanceTraveled){
 
   var polylineToPoint = new google.maps.Polyline({
     path: [],
@@ -92,34 +83,22 @@ function plotMap(steps,distance_traveled){
         var path_origin = nextPathPart[k]
         var dest_path = nextPathPart[k+1]
         var distToCover = google.maps.geometry.spherical.computeDistanceBetween(path_origin,dest_path)
-        if(distanceCovered > distance_traveled){
+        if(distanceCovered > distanceTraveled){
           polylineFromPoint.getPath().push(nextPathPart[k]);
         }
-        else{
-          if(distanceCovered < distance_traveled && distToCover + distanceCovered >= distance_traveled){
-          percentToTravel = (distance_traveled - distanceCovered) / distToCover;
+        else if(distanceCovered < distanceTraveled && distToCover + distanceCovered >= distanceTraveled){
+          percentToTravel = (distanceTraveled - distanceCovered) / distToCover;
 
-          interp_result = google.maps.geometry.spherical.interpolate(path_origin,dest_path, percentToTravel);
+          var interp_result = google.maps.geometry.spherical.interpolate(path_origin,dest_path, percentToTravel);
 
-          var marker = new google.maps.Marker({
-            position: interp_result,
-            map: map,
-            title: "Point Traveled To",
-            icon: {
-              url: window.location.origin + '/assets/face.jpg',
-              size: new google.maps.Size(20, 32),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(0, 32)
-            },
-          });
+          placeMarker(interp_result);
           polylineToPoint.getPath().push(interp_result);
           polylineFromPoint.getPath().push(interp_result);
           }
-          distanceCovered += distToCover;
-        }
-        if(distanceCovered <= distance_traveled){
+        else{
           polylineToPoint.getPath().push(nextPathPart[k]);
         }
+        distanceCovered += distToCover;
       }
       bounds.extend(nextPathPart[k]);
     }
@@ -128,3 +107,24 @@ function plotMap(steps,distance_traveled){
   polylineFromPoint.setMap(map);
   map.fitBounds(bounds);
 }
+
+function placeMarker(location){
+  var marker = new google.maps.Marker({
+    position: location,
+    map: map,
+    title: "Point Traveled To",
+    icon: {
+      url: window.location.origin + '/assets/face.jpg',
+      size: new google.maps.Size(20, 32),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(0, 32)
+    },
+  });
+}
+
+function updateDisplay(totalDist, distanceTraveled){
+  document.getElementById('distance_placeholder').innerHTML = totalDist.value;
+  document.getElementById('distance_placeholder_2').innerHTML = totalDist.text +"les";
+  document.getElementById('distance_to_travel').innerHTML = totalDist.value > distanceTraveled ? (totalDist.value - distanceTraveled) : 'nil';
+  document.getElementById('distance_to_travel_2').innerHTML = (totalDist.value > distanceTraveled ? (Math.round(getMiles((totalDist.value - distanceTraveled)*10))/10 + " miles") : "passed your destination, dude");
+};
