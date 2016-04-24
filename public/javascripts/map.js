@@ -132,7 +132,7 @@ function placeMarker(location){
 
 function updateDisplay(totalDist, distanceTraveled){
   document.getElementById('distance_placeholder').innerHTML = totalDist.value;
-  document.getElementById('distance_placeholder_2').innerHTML = totalDist.text +"les";
+  document.getElementById('distance_placeholder_2').innerHTML = Math.round(getMiles((totalDist.value)*10))/10 + " miles";
   document.getElementById('distance_to_travel').innerHTML = totalDist.value > distanceTraveled ? (totalDist.value - distanceTraveled) : 'nil';
   document.getElementById('distance_to_travel_2').innerHTML = (totalDist.value > distanceTraveled ? (Math.round(getMiles((totalDist.value - distanceTraveled)*10))/10 + " miles") : "passed your destination, dude");
 };
