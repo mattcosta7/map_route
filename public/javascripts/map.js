@@ -107,6 +107,8 @@ function plotMap(steps,distance_traveled){
             title: "Point Traveled To",
             label: "X"
           });
+          polylineToPoint.getPath().push(interp_result);
+          polylineFromPoint.getPath().push(interp_result);
           }
           distanceCovered += distToCover;
         }
