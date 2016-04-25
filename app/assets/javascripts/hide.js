@@ -7,12 +7,11 @@ $('.searches.index').ready(function(){
       $('#show_button').text("Hide Search Form");
     }
     else{
-      $('#show_button').text("Show Search Form")
+      $('#show_button').text("Show Search Form");
     }   
-  })
-})
-
-$('.searches.show').ready(function(){
-    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-    $('.modal-trigger').leanModal();
   });
+});
+
+$('.searches.edit').ready(function(){
+  $("#distance_in_miles").val(Math.round(getMiles($('#search_distance_traveled').val()*100))/100);
+});
