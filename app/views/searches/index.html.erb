@@ -7,6 +7,7 @@
   <%= render partial: 'searches/form' %>
 </div>
 
+<%= will_paginate @searches%>
 <table>
   <thead>
     <tr>
@@ -38,7 +39,7 @@
     <% end %>
   </tbody>
 </table>
+<%= will_paginate @searches%>
 
-<br>
 
 
