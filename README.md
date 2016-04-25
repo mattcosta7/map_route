@@ -1,5 +1,14 @@
 # Map-My-Route
 
+## To Run
+
+```
+git clone
+bundle install
+rake db:create && rake db:migrate
+rails s
+````
+
 ## A Rails Map Generation App
 
 Use the Google Maps API to draw maps with routes between two points and show progress between the points.
