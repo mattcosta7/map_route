@@ -13,8 +13,6 @@ function initMap() {
       placeMarker(destination,"destination");
 
       calculateAndDisplayRoute(origin,destination,distanceTraveled);
-
-
     }
   });
 }
@@ -50,7 +48,7 @@ function plotMap(steps,distanceTraveled){
   var lineSymbol = {
       path: 'M 0,-1 0,1',
       strokeOpacity: 1,
-      strokeColor: '#00FF00',
+      strokeColor: '#0000FF',
       scale: 4
     };
 
@@ -132,7 +130,7 @@ function placeMarker(location,type,dist){
     options
   });
    google.maps.event.addListener(marker, 'click', function(){
-    infowindow.close(); // Close previously opened infowindow
+    infowindow.close();
     infowindow.setContent(this.title);
     infowindow.open(map, marker);
   });

@@ -12,9 +12,9 @@
   <thead>
     <tr>
       <th>Address 1</th>
-      <th>Address 2</th>
       <th>Lat1</th>
       <th>Lng1</th>
+      <th>Address 2</th>
       <th>Lat2</th>
       <th>Lng2</th>
       <th>Distance traveled</th>
@@ -26,9 +26,9 @@
     <% @searches.each do |search| %>
       <tr>
         <td><%= search.address_1 %></td>
-        <td><%= search.address_2 %></td>
         <td><%= search.lat1 %></td>
         <td><%= search.lng1 %></td>
+        <td><%= search.address_2 %></td>
         <td><%= search.lat2 %></td>
         <td><%= search.lng2 %></td>
         <td><%= search.distance_traveled %></td>
