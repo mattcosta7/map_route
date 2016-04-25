@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get '/searches' => redirect('/')
+
   resources :searches
 
   root 'searches#index'
