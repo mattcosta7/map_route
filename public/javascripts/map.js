@@ -1,12 +1,12 @@
 function initMap() {
-      var origin = {lat: search.lat1, lng: search.lng1};
-      var destination = {lat: search.lat2, lng: search.lng2};
-      var distanceTraveled = search.distance_traveled;
-      map = new google.maps.Map(document.getElementById('map'), {});
-      infowindow = new google.maps.InfoWindow();
-      placeMarker(origin,"origin");
-      placeMarker(destination,"destination");
-      calculateAndDisplayRoute(origin,destination,distanceTraveled);
+  var origin = {lat: search.lat1, lng: search.lng1};
+  var destination = {lat: search.lat2, lng: search.lng2};
+  var distanceTraveled = search.distance_traveled;
+  map = new google.maps.Map(document.getElementById('map'), {});
+  infowindow = new google.maps.InfoWindow();
+  placeMarker(origin,"origin");
+  placeMarker(destination,"destination");
+  calculateAndDisplayRoute(origin,destination,distanceTraveled);
 }
 
 function calculateAndDisplayRoute(origin, destination,distanceTraveled) {
@@ -60,20 +60,20 @@ function plotMap(steps,distanceTraveled){
     var nextPathPart = steps[j].path;
     for (k=0;k<nextPathPart.length;k++) {
       if(k<nextPathPart.length-1){
-        var path_origin = nextPathPart[k];
-        var dest_path = nextPathPart[k+1];
-        var distToCover = google.maps.geometry.spherical.computeDistanceBetween(path_origin,dest_path);
+        var pathOrigin = nextPathPart[k];
+        var pathDestination = nextPathPart[k+1];
+        var distToCover = google.maps.geometry.spherical.computeDistanceBetween(pathOrigin,pathDestination);
         if(distanceCovered > distanceTraveled){
           polylineFromPoint.getPath().push(nextPathPart[k]);
         }
         else if(distanceCovered < distanceTraveled && distToCover + distanceCovered >= distanceTraveled){
           percentToTravel = (distanceTraveled - distanceCovered) / distToCover;
 
-          var interp_result = google.maps.geometry.spherical.interpolate(path_origin,dest_path, percentToTravel);
+          var interpResult = google.maps.geometry.spherical.interpolate(pathOrigin,pathDestination, percentToTravel);
 
-          placeMarker(interp_result, 'point');
-          polylineToPoint.getPath().push(interp_result);
-          polylineFromPoint.getPath().push(interp_result);
+          placeMarker(interpResult, 'point');
+          polylineToPoint.getPath().push(interpResult);
+          polylineFromPoint.getPath().push(interpResult);
           }
         else{
           polylineToPoint.getPath().push(nextPathPart[k]);
