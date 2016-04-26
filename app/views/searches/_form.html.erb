@@ -32,16 +32,16 @@
     <div class="row" onload='converter()'>
       <div class="input-field col s6">
         <%= f.label :distance_traveled_in_meters %><br>
-        <%= f.text_field :distance_traveled %> 
+        <%= f.text_field :distance_traveled %>
       </div>
-      <div class="input-field col s6"> 
+      <div class="input-field col s6">
         <%= f.label :distance_traveled_in_miles %> <br>
         <%= text_field_tag :distance_in_miles %>
       </div>
     </div>
 
     <div class="actions">
-      <%= f.submit %>
+      <%= f.submit class: "waves-effect waves-light btn purple darken-4" %>
     </div>
   <% end %>
 </div>

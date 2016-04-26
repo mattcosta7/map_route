@@ -2,7 +2,7 @@ class SearchesController < ApplicationController
   before_action :set_search, only: [:show, :edit, :update, :destroy]
 
   def index
-    @searches = Search.paginate(page: params[:page], per_page: 5)
+    @searches = Search.order("created_at DESC").paginate(page: params[:page], per_page: 5)
   end
 
   def show

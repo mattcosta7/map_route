@@ -11,6 +11,7 @@
 <table>
   <thead>
     <tr>
+      <th>ID</th>
       <th>Address 1</th>
       <th>Lat1</th>
       <th>Lng1</th>
@@ -25,6 +26,7 @@
   <tbody>
     <% @searches.each do |search| %>
       <tr>
+        <td><%= search.id%></td>
         <td><%= search.address_1 %></td>
         <td><%= search.lat1 %></td>
         <td><%= search.lng1 %></td>
@@ -40,6 +42,3 @@
   </tbody>
 </table>
 <%= will_paginate @searches%>
-
-
-
