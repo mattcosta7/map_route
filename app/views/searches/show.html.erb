@@ -6,10 +6,10 @@
     End: <%=@search.address_2%>
   <p>
   <p>
-    Total Distance: <span id='distance_placeholder'></span> meters | <span id='distance_placeholder_2'></span> 
+    Total Distance: <span id='distance_placeholder'></span> meters | <span id='distance_placeholder_2'></span>
   </p>
   <p>
-    Distance To Travel: <span id='distance_to_travel'></span> meters | <span id='distance_to_travel_2'></span> 
+    Distance To Travel: <span id='distance_to_travel'></span> meters | <span id='distance_to_travel_2'></span>
   </p>
   <% if @search.distance_traveled.present? %>
     <p>Distance Traveled: <%=@search.distance_traveled_neat%> meters | <%=@search.distance_traveled_miles_neat%> miles<p>
@@ -24,5 +24,8 @@
 
 
 <div id="map"></div>
+<script>
+  search = <%=raw @search.to_json%>;
+</script>
 <script src='/javascripts/map.js'></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=<%=Rails.application.secrets.gmaps_key%>&library=geometry,places&callback=initMap"></script>

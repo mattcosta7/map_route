@@ -1,20 +1,12 @@
 function initMap() {
-  $.ajax({
-    url: window.location.pathname,
-    method: 'get',
-    success:function(response){
-      var origin = {lat: response.lat1, lng: response.lng1};
-      var destination = {lat: response.lat2, lng: response.lng2};
-      var distanceTraveled = response.distance_traveled;
-
+      var origin = {lat: search.lat1, lng: search.lng1};
+      var destination = {lat: search.lat2, lng: search.lng2};
+      var distanceTraveled = search.distance_traveled;
       map = new google.maps.Map(document.getElementById('map'), {});
       infowindow = new google.maps.InfoWindow();
       placeMarker(origin,"origin");
       placeMarker(destination,"destination");
-
       calculateAndDisplayRoute(origin,destination,distanceTraveled);
-    }
-  });
 }
 
 function calculateAndDisplayRoute(origin, destination,distanceTraveled) {
@@ -79,7 +71,7 @@ function plotMap(steps,distanceTraveled){
 
           var interp_result = google.maps.geometry.spherical.interpolate(path_origin,dest_path, percentToTravel);
 
-          placeMarker(interp_result, 'point', distanceCovered);
+          placeMarker(interp_result, 'point');
           polylineToPoint.getPath().push(interp_result);
           polylineFromPoint.getPath().push(interp_result);
           }
@@ -104,7 +96,7 @@ function plotMap(steps,distanceTraveled){
   map.fitBounds(bounds);
 }
 
-function placeMarker(location,type,dist){
+function placeMarker(location,type){
   if(type=="point"){
     options = {
       icon: {

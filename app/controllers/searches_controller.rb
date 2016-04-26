@@ -6,10 +6,6 @@ class SearchesController < ApplicationController
   end
 
   def show
-    respond_to do |format|
-      format.json {render json: @search}
-      format.html
-    end
   end
 
   def new
