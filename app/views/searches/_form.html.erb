@@ -16,15 +16,15 @@
       <%=f.fields_for :locations, location do |ff|%>
         <div class="row location_for_search">
           <div class="input-field col s12">
-            <%= ff.label :Location %><br>
-            <%= ff.text_field :address, class: 'autocomplete' %>
+            <%= ff.label ( index==0 ? :origin : index==9 ? :destination : "waypoint_#{index} (optional)" ) %><br>
+            <%= ff.text_field :address, class: 'autocomplete', required: (index == 0 || index==9 ? true : false)%>
             <%= ff.hidden_field :lat %>
             <%= ff.hidden_field :lng %>
           </div>
         </div>
       <%end%>
     <%end%>
-    <button type='button' class='show_another_location btn'>Add A Location</button>
+   <!-- <button type='button' class='show_another_location btn'>Add A Location</button> -->
 
     <div class="row" onload='converter()'>
       <div class="input-field col s6">
@@ -39,7 +39,6 @@
 
     <div class="row">
       <div class="input-field col s6">
-
         <%= f.check_box :optimize %>
         <%= f.label :optimize %><br>
         <span class='warning'>Clicking this will rearrange to the most efficient route, leaving the only the origin and destination as is</span>
