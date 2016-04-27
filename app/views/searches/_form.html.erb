@@ -37,6 +37,17 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="input-field col s6">
+
+        <%= f.check_box :optimize %>
+        <%= f.label :optimize %><br>
+        <span class='warning'>Clicking this will rearrange to the most efficient route, leaving the only the origin and destination as is</span>
+      </div>
+
+    </div>
+
+
     <div class="actions">
       <%= f.submit class: "btn purple darken-4" %>
     </div>

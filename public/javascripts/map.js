@@ -10,16 +10,16 @@ function initMap() {
   }
   placeMarker(origin,"origin");
   placeMarker(destination,"destination");
-  calculateAndDisplayRoute(origin,destination,distanceTraveled, waypoints);
+  calculateAndDisplayRoute(origin,destination,distanceTraveled, waypoints, optimize);
 }
 
-function calculateAndDisplayRoute(origin, destination,distanceTraveled, waypoints) {
+function calculateAndDisplayRoute(origin, destination,distanceTraveled, waypoints, optimize=false) {
   var directionsService = new google.maps.DirectionsService();
   var routeOptions = {
     origin: origin,
     destination: destination,
     waypoints: waypoints,
-    optimizeWaypoints: true,
+    optimizeWaypoints: optimize,
     travelMode: google.maps.TravelMode.DRIVING
   };
   directionsService.route(routeOptions, function(response, status) {

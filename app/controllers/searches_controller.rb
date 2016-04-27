@@ -23,15 +23,20 @@ class SearchesController < ApplicationController
 
   # GET /searches/1/edit
   def edit
+    @locations = @search.locations
+    if @locations.length < 8
+      (8 - @locations.length).times do
+        @locations << @search.locations.new
+      end
+    end
   end
 
   # POST /searches
   # POST /searches.json
   def create
-    @search = Search.new(distance_traveled: params[:search][:distance_traveled])
+    @search = Search.new(search_params)
     if @search.save
       params[:search][:locations_attributes].each do |location|
-        puts location
         @search.locations.create(
           address: location[1][:address],
           lat: location[1][:lat],
@@ -39,7 +44,12 @@ class SearchesController < ApplicationController
         ) unless !location[1][:address].present?
       end
     end
-    redirect_to @search, notice: 'Search was successfully created.'
+    if @search.locations.length < 2
+      @search.destroy
+      redirect_to new_search_path
+    else
+      redirect_to @search, notice: 'Search was successfully created.'
+    end
   end
 
   # PATCH/PUT /searches/1
@@ -47,6 +57,14 @@ class SearchesController < ApplicationController
   def update
     respond_to do |format|
       if @search.update(search_params)
+        @search.locations.each{|location| location.destroy}
+        params[:search][:locations_attributes].each do |location|
+          @search.locations.create(
+            address: location[1][:address],
+            lat: location[1][:lat],
+            lng: location[1][:lng]
+          ) unless !location[1][:address].present?
+        end
         format.html { redirect_to @search, notice: 'Search was successfully updated.' }
         format.json { render :show, status: :ok, location: @search }
       else
@@ -73,7 +91,7 @@ class SearchesController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    # def search_params
-    #   params.require(:search).permit(:distance, :waypoint)
-    # end
+    def search_params
+      params.require(:search).permit(:distance_traveled, :optimize)
+    end
 end
