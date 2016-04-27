@@ -24,9 +24,12 @@ function calculateAndDisplayRoute(origin, destination,distanceTraveled, waypoint
   };
   directionsService.route(routeOptions, function(response, status) {
     if (status === google.maps.DirectionsStatus.OK) {
-      var totalRouteDistance = response.routes[0].legs[0].distance;
+      var totalRouteDistance = 0;
+      legs = response.routes[0].legs;
+      for(var z = 0; z<legs.length;z++){
+        totalRouteDistance += legs[z].distance.value;
+      }
       updateDisplay(totalRouteDistance, distanceTraveled);
-      var legs = response.routes[0].legs;
       plotMap(legs, distanceTraveled);
     }
     else {
@@ -142,8 +145,8 @@ function placeMarker(location,type){
 
 
 function updateDisplay(totalDist, distanceTraveled){
-  document.getElementById('distance_placeholder').innerHTML = totalDist.value;
-  document.getElementById('distance_placeholder_2').innerHTML = Math.round(getMiles((totalDist.value)*10))/10 + " miles";
-  document.getElementById('distance_to_travel').innerHTML = totalDist.value > distanceTraveled ? Math.round((totalDist.value - distanceTraveled)*10)/10 : 'nil';
-  document.getElementById('distance_to_travel_2').innerHTML = (totalDist.value > distanceTraveled ? (Math.round(getMiles((totalDist.value - distanceTraveled)*10))/10 + " miles") : "passed your destination, dude");
+  document.getElementById('distance_placeholder').innerHTML = totalDist;
+  document.getElementById('distance_placeholder_2').innerHTML = Math.round(getMiles((totalDist)*10))/10 + " miles";
+  document.getElementById('distance_to_travel').innerHTML = totalDist > distanceTraveled ? Math.round((totalDist - distanceTraveled)*10)/10 : 'nil';
+  document.getElementById('distance_to_travel_2').innerHTML = (totalDist > distanceTraveled ? (Math.round(getMiles((totalDist - distanceTraveled)*10))/10 + " miles") : "passed your destination, dude");
 }

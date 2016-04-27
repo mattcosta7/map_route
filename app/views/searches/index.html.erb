@@ -2,23 +2,16 @@
 
 <h1>Search History</h1>
 
-<button id='show_button' class='waves-effect waves-light btn deep-orange darken-4'>Show Search Form</button>
-<div id='form_on_index'>
-  <%= render partial: 'searches/form' %>
-</div>
+<%=link_to "New Search", new_search_path, class: "waves-effect waves-light btn purple darken-4" %>
 
 <%= will_paginate @searches%>
 <table>
   <thead>
     <tr>
       <th>ID</th>
-      <th>Address 1</th>
-      <th>Lat1</th>
-      <th>Lng1</th>
-      <th>Address 2</th>
-      <th>Lat2</th>
-      <th>Lng2</th>
+      <th>Locations Tapped</th>
       <th>Distance traveled</th>
+      <th>Optimized?</th>
       <th colspan="3" class='center'>Actions</th>
     </tr>
   </thead>
@@ -27,13 +20,17 @@
     <% @searches.each do |search| %>
       <tr>
         <td><%= search.id %></td>
-        <td><%= search.address_1 %></td>
-        <td><%= search.lat1 %></td>
-        <td><%= search.lng1 %></td>
-        <td><%= search.address_2 %></td>
-        <td><%= search.lat2 %></td>
-        <td><%= search.lng2 %></td>
+        <td>
+          <ul>
+            <% search.locations.each do |location| %>
+              <li>
+                <%=location.address%>
+              </li>
+            <%end%>
+          </ul>
+        </td>
         <td><%= search.distance_traveled %></td>
+        <td><%= search.optimize %></td>
         <td><%= link_to 'Show', search, class: "waves-effect waves-light btn" %></td>
         <td><%= link_to 'Edit', edit_search_path(search), class: "waves-effect waves-light btn orange" %></td>
         <td><%= link_to 'Destroy', search, method: :delete, data: { confirm: 'Are you sure?' }, class: "waves-effect waves-light btn red" %></td>

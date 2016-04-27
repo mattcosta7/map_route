@@ -1,9 +1,9 @@
 <div id="hud">
   <p>
-    Start: <%=@search.address_1%>
+    Start: <%=@search.locations.first.address%>
   </p>
   <p>
-    End: <%=@search.address_2%>
+    End: <%=@search.locations.last.address%>
   <p>
   <p>
     Total Distance: <span id='distance_placeholder'></span> meters | <span id='distance_placeholder_2'></span>

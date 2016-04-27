@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160427031055) do
+ActiveRecord::Schema.define(version: 20160427041603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,12 +49,6 @@ ActiveRecord::Schema.define(version: 20160427031055) do
   add_index "search_locations", ["search_id"], name: "index_search_locations_on_search_id", using: :btree
 
   create_table "searches", force: :cascade do |t|
-    t.string   "address_1"
-    t.string   "address_2"
-    t.float    "lat1"
-    t.float    "lng1"
-    t.float    "lat2"
-    t.float    "lng2"
     t.float    "distance_traveled"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
