@@ -23,7 +23,10 @@ class SearchesController < ApplicationController
 
   # GET /searches/1/edit
   def edit
-    @locations = @search.locations
+    @locations = []
+    @search.locations.each do |location|
+      @locations << location
+    end
     if @locations.length < 8
       (8 - @locations.length).times do
         @locations << @search.locations.new
