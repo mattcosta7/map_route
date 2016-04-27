@@ -1,13 +1,13 @@
 $('.searches.new').ready(function(){
 
   count = 2;
-  for(var i =2; i<8; i++){
+  for(var i =2; i<10; i++){
     $($('.location_for_search')[i]).hide();
   }
   $('.show_another_location').on('click',function(){
     $($('.location_for_search')[count]).show();
     count++;
-    if (count == 8){
+    if (count == 10){
       $('.show_another_location').hide();
     }
   });
@@ -20,9 +20,9 @@ $('.searches.edit').ready(function(){
     if($($('.location_for_search')[i]).find('.autocomplete').val() !== ""){
       $($('.location_for_search')[i]).show();
       count++;
-      if(count == 8){
+      if(count == 10){
           $('.show_another_location').hide();
       }
     }
   }
-})
+});

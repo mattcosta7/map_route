@@ -21,7 +21,7 @@ class SearchesController < ApplicationController
   def new
     @search = Search.new
     @locations = []
-    8.times do
+    10.times do
       @locations << @search.locations.new
     end
   end
@@ -32,8 +32,8 @@ class SearchesController < ApplicationController
     @search.locations.each do |location|
       @locations << location
     end
-    if @locations.length < 8
-      (8 - @locations.length).times do
+    if @locations.length < 10
+      (10 - @locations.length).times do
         @locations << @search.locations.new
       end
     end
