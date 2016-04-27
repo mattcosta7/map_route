@@ -1,7 +1,5 @@
 $('.searches.new').ready(function(){
 
-
-
   count = 2;
   for(var i =2; i<8; i++){
     $($('.location_for_search')[i]).hide();
@@ -14,3 +12,17 @@ $('.searches.new').ready(function(){
     }
   });
 });
+
+
+$('.searches.edit').ready(function(){
+  count = 0;
+  for(var i=0; i< $('.location_for_search').length; i++){
+    if($($('.location_for_search')[i]).find('.autocomplete').val() !== ""){
+      $($('.location_for_search')[i]).show();
+      count++;
+      if(count == 8){
+          $('.show_another_location').hide();
+      }
+    }
+  }
+})

@@ -11,4 +11,13 @@ class Search < ActiveRecord::Base
     distance_traveled.round(5)
   end
 
+  def origin
+    self.locations.first
+  end
+
+  def destination
+    self.location.last
+  end
+
+
 end
