@@ -5,7 +5,7 @@ class SearchesController < ApplicationController
   # GET /searches.json
   def index
     if params[:location]
-      @searches = Search.includes(:search_locations).includes(:locations).search_locations(params[:location].downcase).paginate(page: params[:page], per_page: 6)
+      @searches = Search.includes(:locations).search_locations(params[:location].downcase).paginate(page: params[:page], per_page: 6)
       @subtitle = "Queries Through #{params[:location]}"
     else
       @searches = Search.includes(:search_locations).includes(:locations).paginate(page: params[:page], per_page: 6)

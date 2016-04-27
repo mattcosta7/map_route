@@ -7,13 +7,13 @@ function getMeters(i) {
 
 $('#new_search').ready(function(){
   $('#search_distance_traveled').on('keyup',function(){
-    value = $(this).val()
-    $('#distance_in_miles').val(getMiles(value))
+    value = $(this).val();
+    $('#distance_in_miles').val(getMiles(value));
   });
 
   $('#distance_in_miles').on('keyup',function(){
-    value = $(this).val()
-    $('#search_distance_traveled').val(getMeters(value))
+    value = $(this).val();
+    $('#search_distance_traveled').val(getMeters(value));
 
   });
 });
