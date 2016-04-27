@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  search_id: 
+  location_id: 
+  order: 1
+
+two:
+  search_id: 
+  location_id: 
+  order: 1

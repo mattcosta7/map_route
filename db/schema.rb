@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160424185032) do
+ActiveRecord::Schema.define(version: 20160426203848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,25 @@ ActiveRecord::Schema.define(version: 20160424185032) do
   add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
+  create_table "locations", force: :cascade do |t|
+    t.string   "address"
+    t.float    "lat"
+    t.float    "lng"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "search_locations", force: :cascade do |t|
+    t.integer  "search_id"
+    t.integer  "location_id"
+    t.integer  "order"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "search_locations", ["location_id"], name: "index_search_locations_on_location_id", using: :btree
+  add_index "search_locations", ["search_id"], name: "index_search_locations_on_search_id", using: :btree
+
   create_table "searches", force: :cascade do |t|
     t.string   "address_1"
     t.string   "address_2"
@@ -44,4 +63,5 @@ ActiveRecord::Schema.define(version: 20160424185032) do
 
   add_index "searches", ["slug"], name: "index_searches_on_slug", unique: true, using: :btree
 
+  add_foreign_key "search_locations", "locations"
 end

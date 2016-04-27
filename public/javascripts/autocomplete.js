@@ -11,40 +11,44 @@ var componentForm = {
 function initAutocomplete() {
   // Create the autocomplete object, restricting the search to geographical
   // location types.
-  autocomplete = new google.maps.places.Autocomplete(
-    document.getElementById('search_address_1'),
-      {types: ['geocode']}
-    );
-  autocomplete2 = new google.maps.places.Autocomplete(
-    document.getElementById('search_address_2'),
-      {types: ['geocode']}
-    );
-  google.maps.event.addListener(autocomplete, 'place_changed', function () {
-      var place = autocomplete.getPlace(); 
-      document.getElementById('search_lat1').value = place.geometry.location.lat();
-      document.getElementById('search_lng1').value = place.geometry.location.lng();
-  });
-  google.maps.event.addListener(autocomplete2, 'place_changed', function () {
-      var place = autocomplete2.getPlace(); 
-      document.getElementById('search_lat2').value = place.geometry.location.lat();
-      document.getElementById('search_lng2').value = place.geometry.location.lng();
+  geocoder = new google.maps.Geocoder();
+  var acInputs = document.getElementsByClassName("autocomplete");
 
-  });
+    for (var i = 0; i < acInputs.length; i++) {
+
+        var autocomplete = new google.maps.places.Autocomplete(acInputs[i]);
+        autocomplete.inputId = acInputs[i].id;
+
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+          var inputField = document.getElementById(this.inputId);
+          var place = inputField.value;
+          geocoder.geocode({"address": place}, function(results, status){
+            if (status == google.maps.GeocoderStatus.OK){
+              console.log(results[0].geometry.location);
+              inputField.nextElementSibling.value = results[0].geometry.location.lat();
+              inputField.nextElementSibling.nextElementSibling.value = results[0].geometry.location.lng()
+            }
+          });
+          // var place = autocomplete.inputId.getPlace();
+          // this.nextElementSibling.value = place.geometry.location.lat();
+          // this.nextElementSibling.nextElementSibling.value = place.geometry.location.lng();
+
+        });
+    }
 }
 
-function geolocate() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var geolocation = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-      var circle = new google.maps.Circle({
-        center: geolocation,
-        radius: position.coords.accuracy
-      });
-      autocomplete.setBounds(circle.getBounds());
-    });
-  }
-}
-
+// function geolocate() {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(function(position) {
+//       var geolocation = {
+//         lat: position.coords.latitude,
+//         lng: position.coords.longitude
+//       };
+//       var circle = new google.maps.Circle({
+//         center: geolocation,
+//         radius: position.coords.accuracy
+//       });
+//       autocomplete.setBounds(circle.getBounds());
+//     });
+//   }
+// }

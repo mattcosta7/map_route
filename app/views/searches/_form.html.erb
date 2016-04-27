@@ -11,31 +11,28 @@
         </ul>
       </div>
     <% end %>
+    <h3>Add at least 2, and up to 8 Locations</h3>
+    <%@locations.each_with_index do |location,index| %>
+      <%=f.fields_for :locations, location do |ff|%>
+        <div class="row location_for_search">
+          <div class="input-field col s12">
+            <%= ff.label :Location %><br>
+            <%= ff.text_field :address, class: 'autocomplete' %>
+            <%= ff.hidden_field :lat %>
+            <%= ff.hidden_field :lng %>
+          </div>
+        </div>
+      <%end%>
+    <%end%>
+    <button type='button' class='show_another_location'>Add A Location</button>
 
-    <div class="row">
-      <div class="input-field col s12">
-        <%= f.label :"Origin_Point" %><br>
-        <%= f.text_field :address_1, :required => true %>
-      </div>
-    </div>
-    <div class="row">
-      <div class="input-field col s12">
-        <%= f.label :"Destination_Point" %><br>
-        <%= f.text_field :address_2, :required => true %>
-      </div>
-    </div>
-      <%= f.hidden_field :lat1 %>
-      <%= f.hidden_field :lng1 %>
-      <%= f.hidden_field :lat2 %>
-      <%= f.hidden_field :lng2 %>
-    </div>
     <div class="row" onload='converter()'>
       <div class="input-field col s6">
         <%= f.label :distance_traveled_in_meters %><br>
         <%= f.text_field :distance_traveled %>
       </div>
       <div class="input-field col s6">
-        <%= f.label :distance_traveled_in_miles %> <br>
+        <%= label_tag :distance_traveled_in_miles %> <br>
         <%= text_field_tag :distance_in_miles %>
       </div>
     </div>

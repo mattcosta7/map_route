@@ -10,7 +10,6 @@ gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'materialize-sass'
-gem 'friendly_id'
 gem 'will_paginate-materialize'
 
 group :development, :test do
@@ -25,4 +24,3 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
-
