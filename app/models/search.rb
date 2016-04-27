@@ -7,6 +7,7 @@ class Search < ActiveRecord::Base
   friendly_id :generate_custom_slug, use: :slugged
   before_save :save_slug
 
+  scope :search_locations, ->(location){select{|search| search if search.locations.search(location).length>0}}
   def distance_traveled_miles_neat
     (distance_traveled * 0.000621371192).round(5)
   end

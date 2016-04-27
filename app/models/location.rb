@@ -7,4 +7,7 @@ class Location < ActiveRecord::Base
   validates :lng, presence: true, on: [:create,:update]
   validates_numericality_of :lat, on: [:create,:update]
   validates_numericality_of :lng, on: [:create,:update]
+
+  scope :search, ->(location){where("address LIKE ? ", "%#{location}%")}
+  scope :get_searches, -> {collect{|location| location.searches.uniq}}
 end

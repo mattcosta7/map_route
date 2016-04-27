@@ -1,10 +1,15 @@
 class SearchesController < ApplicationController
   before_action :set_search, only: [:show, :edit, :update, :destroy]
-
+  require 'will_paginate/array'
   # GET /searches
   # GET /searches.json
   def index
-    @searches = Search.includes(:search_locations).includes(:locations).paginate(page: params[:page])
+    if params[:location]
+      @searches = Search.includes(:search_locations).includes(:locations).search_locations(params[:location].downcase).paginate(page: params[:page], per_page: 6)
+      @subtitle = "Queries Through #{params[:location]}"
+    else
+      @searches = Search.includes(:search_locations).includes(:locations).paginate(page: params[:page], per_page: 6)
+    end
   end
 
   # GET /searches/1
@@ -17,7 +22,7 @@ class SearchesController < ApplicationController
     @search = Search.new
     @locations = []
     8.times do
-      @locations << @search.locations.build
+      @locations << @search.locations.new
     end
   end
 
@@ -44,7 +49,7 @@ class SearchesController < ApplicationController
           address: location[1][:address],
           lat: location[1][:lat],
           lng: location[1][:lng]
-        ).first_or_create unless !location[1][:address].present?
+        ).first_or_create unless !location[1][:address].present? || !location[1][:lat].present? || !location[1][:lng].present?
       end
     end
     if @search.locations.length < 2
