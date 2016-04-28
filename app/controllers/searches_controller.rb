@@ -5,10 +5,10 @@ class SearchesController < ApplicationController
   # GET /searches.json
   def index
     if params[:location]
-      @searches = Search.includes(:search_locations).includes(:locations).search_locations(params[:location].downcase).paginate(page: params[:page], per_page: 6)
+      @searches = Search.includes(:origin,:destination, :locations).search_locations(params[:location].downcase).paginate(page: params[:page], per_page: 6)
       @subtitle = "Queries Through #{params[:location]}"
     else
-      @searches = Search.includes(:search_locations).includes(:locations).paginate(page: params[:page], per_page: 6)
+      @searches = Search.includes(:origin,:destination, :locations).paginate(page: params[:page], per_page: 6)
     end
   end
 
@@ -95,7 +95,7 @@ class SearchesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_search
-      @search = Search.friendly.includes(:locations).find(params[:id])
+      @search = Search.friendly.includes(:origin,:destination, :locations).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
