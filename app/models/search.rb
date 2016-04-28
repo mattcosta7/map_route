@@ -3,9 +3,15 @@ class Search < ActiveRecord::Base
   has_many :locations, through: :search_locations
   belongs_to :origin, class_name: :Location
   belongs_to :destination, class_name: :Location
+  validates :origin, presence: true
+  validates :destination, presence: true
   accepts_nested_attributes_for :origin
   accepts_nested_attributes_for :destination
   accepts_nested_attributes_for :locations
+
+  extend FriendlyId
+  friendly_id :generate_custom_slug, use: :slugged
+  before_save :create_slug
 
   scope :search_locations, ->(location){select{|search| search if search.locations.search(location).length>0 || search.origin.address.include?(location) || search.destination.address.include?(location)}}
 
@@ -32,4 +38,13 @@ class Search < ActiveRecord::Base
       self.destination.save!
     end
   end
+
+  def generate_custom_slug
+    "#{origin.address}-#{destination.address}-#{locations.count}waypoints-#{id}".parameterize
+  end
+
+  def create_slug
+    self.slug = self.generate_custom_slug
+  end
+
 end

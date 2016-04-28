@@ -1,0 +1,16 @@
+<p>
+  Add Up To 8 Waypoints For Your Route To Traverse
+</p>
+<%@locations.each_with_index do |location,index| %>
+  <%=f.fields_for :locations, location do |ff|%>
+    <div class="row waypoints_for_search">
+      <div class="input-field col s12">
+        <%= ff.label "waypoint_#{index+1} (optional)" %><br>
+        <%= ff.text_field :address, class: 'autocomplete'%>
+        <%= ff.hidden_field :lat %>
+        <%= ff.hidden_field :lng %>
+      </div>
+    </div>
+  <%end%>
+<%end%>
+<button type='button' class='show_another_location btn'>Add A Waypoint</button>

@@ -10,12 +10,12 @@ $('searches.new').ready(function(){
   }
 
   $('.show_another_location').on('click',function(){
-    if(keeper == 8){
-      $('.show_another_location').hide();
-    }
-    else{
+    if(keeper < 8){
       $($('.waypoints_for_search')[keeper]).show();
     }
     keeper++;
+    if(keeper == 8){
+      $('.show_another_location').hide();
+    }
   });
 });
