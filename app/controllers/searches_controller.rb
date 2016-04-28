@@ -20,8 +20,10 @@ class SearchesController < ApplicationController
   # GET /searches/new
   def new
     @search = Search.new
+    @search.origin = Location.new
+    @search.destination = Location.new
     @locations = []
-    10.times do
+    8.times do
       @locations << @search.locations.new
     end
   end
@@ -32,8 +34,8 @@ class SearchesController < ApplicationController
     @search.locations.each do |location|
       @locations << location
     end
-    if @locations.length < 10
-      (10 - @locations.length).times do
+    if @locations.length < 8
+      (8 - @locations.length).times do
         @locations << @search.locations.new
       end
     end
@@ -44,6 +46,15 @@ class SearchesController < ApplicationController
   def create
     @search = Search.new(search_params)
     if @search.save
+      @search.origin = Location.where(
+        address: params[:search][:origin][:address],
+        lat: params[:search][:origin][:lat],
+        lng: params[:search][:origin][:lng]).first_or_create
+      @search.destination = Location.where(
+        address: params[:search][:destination][:address],
+        lat: params[:search][:destination][:lat],
+        lng: params[:search][:destination][:lng]).first_or_create
+      @search.save
       params[:search][:locations_attributes].each do |location|
         @search.locations << Location.where(
           address: location[1][:address],
@@ -52,12 +63,7 @@ class SearchesController < ApplicationController
         ).first_or_create unless !location[1][:address].present? || !location[1][:lat].present? || !location[1][:lng].present?
       end
     end
-    if @search.locations.length < 2
-      @search.destroy
-      redirect_to new_search_path
-    else
-      redirect_to @search, notice: 'Search was successfully created.'
-    end
+    redirect_to @search, notice: 'Search was successfully created.'
   end
 
   # PATCH/PUT /searches/1
@@ -65,6 +71,15 @@ class SearchesController < ApplicationController
   def update
     respond_to do |format|
       if @search.update(search_params)
+        @search.origin = Location.where(
+          address: params[:search][:origin][:address],
+          lat: params[:search][:origin][:lat],
+          lng: params[:search][:origin][:lng]).first_or_create
+        @search.destination = Location.where(
+          address: params[:search][:destination][:address],
+          lat: params[:search][:destination][:lat],
+          lng: params[:search][:destination][:lng]).first_or_create
+        @search.save
         @search.locations.each{|location| location.destroy}
         params[:search][:locations_attributes].each do |location|
           @search.locations.create(
@@ -95,11 +110,11 @@ class SearchesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_search
-      @search = Search.friendly.includes(:search_locations).includes(:locations).find(params[:id])
+      @search = Search.includes(:search_locations).includes(:locations).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def search_params
-      params.require(:search).permit(:distance_traveled, :optimize)
+      params.require(:search).permit(:distance_traveled, :optimize, :origin, :destination)
     end
 end

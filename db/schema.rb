@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160427041603) do
+ActiveRecord::Schema.define(version: 20160428011223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,9 +54,12 @@ ActiveRecord::Schema.define(version: 20160427041603) do
     t.datetime "updated_at",        null: false
     t.string   "slug"
     t.boolean  "optimize"
+    t.integer  "origin_id"
+    t.integer  "destination_id"
   end
 
   add_index "searches", ["slug"], name: "index_searches_on_slug", unique: true, using: :btree
 
   add_foreign_key "search_locations", "locations"
+  add_foreign_key "search_locations", "searches"
 end

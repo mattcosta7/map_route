@@ -40,11 +40,13 @@
         <td><%= search.id %></td>
         <td>
           <ul>
+            <li><%= search.origin.address%></li>
             <% search.locations.each do |location| %>
               <li>
                 <%=location.address%>
               </li>
             <%end%>
+            <li><%= search.destination.address%></li>
           </ul>
         </td>
         <td><%= search.distance_traveled %></td>

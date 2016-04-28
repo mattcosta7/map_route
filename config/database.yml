@@ -1,19 +1,8 @@
-# PostgreSQL. Versions 8.2 and up are supported.
-#
-# Install the pg driver:
-#   gem install pg
-# On OS X with Homebrew:
-#   gem install pg -- --with-pg-config=/usr/local/bin/pg_config
-# On OS X with MacPorts:
-#   gem install pg -- --with-pg-config=/opt/local/lib/postgresql84/bin/pg_config
-# On Windows:
-#   gem install pg
-#       Choose the win32 build.
-#       Install PostgreSQL and put its /bin directory on your path.
-#
-# Configure Using Gemfile
-# gem 'pg'
-#
+<%
+  branch = `git symbolic-ref HEAD 2>/dev/null`.chomp.sub('refs/heads/', '')
+  suffix = `git config --bool branch.#{branch}.database`.chomp == 'true' ? "_#{branch}" : ""
+%>
+
 default: &default
   adapter: postgresql
   encoding: unicode
@@ -23,7 +12,7 @@ default: &default
 
 development:
   <<: *default
-  database: map-my-route_development
+  database: map-my-route_development<%= suffix %>
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -57,7 +46,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: map-my-route_test
+  database: map-my-route_test<%= suffix %>
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is

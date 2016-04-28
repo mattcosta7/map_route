@@ -11,21 +11,39 @@
         </ul>
       </div>
     <% end %>
-    <h3>Add at least 2, and up to 8 Locations</h3>
+    <%=f.fields_for :origin do |fo| %>
+      <div class="row">
+        <div class="input-field col s12">
+          <%= fo.label :origin %><br>
+          <%= fo.text_field :address, value: @search.origin.address, class: 'autocomplete', required: true %>
+          <%= fo.hidden_field :lat, value: @search.origin.lat %>
+          <%= fo.hidden_field :lng, value: @search.origin.lng %>
+        </div>
+      </div>
+    <%end%>
     <%@locations.each_with_index do |location,index| %>
       <%=f.fields_for :locations, location do |ff|%>
-        <div class="row location_for_search">
+        <div class="row waypoints_for_search">
           <div class="input-field col s12">
-            <%= ff.label ( index==0 ? :origin : index==9 ? :destination : "waypoint_#{index} (optional)" ) %><br>
-            <%= ff.text_field :address, class: 'autocomplete', required: (index == 0 || index==9 ? true : false)%>
+            <%= ff.label "waypoint_#{index+1} (optional)" %><br>
+            <%= ff.text_field :address, class: 'autocomplete'%>
             <%= ff.hidden_field :lat %>
             <%= ff.hidden_field :lng %>
           </div>
         </div>
       <%end%>
     <%end%>
-   <!-- <button type='button' class='show_another_location btn'>Add A Location</button> -->
-
+   <button type='button' class='show_another_location btn'>Add A Waypoint</button>
+   <%=f.fields_for :destination do |fd| %>
+     <div class="row">
+       <div class="input-field col s12">
+         <%= fd.label :destination %><br>
+         <%= fd.text_field :address, value: @search.destination.address, class: 'autocomplete', required: true %>
+         <%= fd.hidden_field :lat, value: @search.destination.lat %>
+         <%= fd.hidden_field :lng, value: @search.destination.lng %>
+       </div>
+     </div>
+   <%end%>
     <div class="row" onload='converter()'>
       <div class="input-field col s6">
         <%= f.label :distance_traveled_in_meters %><br>

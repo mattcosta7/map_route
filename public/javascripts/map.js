@@ -1,12 +1,12 @@
 function initMap() {
-  var origin = locations.shift();
-  var destination = locations.pop();
-  waypoints = [];
+  var origin = searchOrigin;
+  var destination = searchDestination;
+  var waypoints = [];
   var distanceTraveled = distance;
   map = new google.maps.Map(document.getElementById('map'), {});
   infowindow = new google.maps.InfoWindow();
-  for(var i = 0; i < locations.length; i++){
-    waypoints.push({location: new google.maps.LatLng(locations[i].lat,locations[i].lng), stopover: true});
+  for(var i = 0; i < searchWaypoints.length; i++){
+    waypoints.push({location: new google.maps.LatLng(searchWaypoints[i].lat,searchWaypoints[i].lng), stopover: true});
   }
   placeMarker(origin,"origin");
   placeMarker(destination,"destination");

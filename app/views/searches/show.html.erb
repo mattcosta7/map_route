@@ -26,7 +26,9 @@
 <div id="map"></div>
 <script>
   search = <%=raw @search.to_json%>;
-  locations = <%=raw @search.locations.to_json%>;
+  searchOrigin = <%=raw @search.origin.to_json%>
+  searchDestination = <%=raw @search.destination.to_json%>
+  searchWaypoints = <%=raw @search.locations.to_json%>;
   distance = search.distance_traveled;
   optimize = search.optimize;
 
