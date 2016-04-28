@@ -22,4 +22,4 @@ Use the Google Maps API to draw maps with routes between two points and show pro
 
 Uses Google Maps, Geometry, Places, Autocomplete APIs
 
-![inline](./public/MapMyRoute2.png)
+![inline](./public/MapMyRoute3.png)
