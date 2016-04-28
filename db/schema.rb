@@ -61,5 +61,4 @@ ActiveRecord::Schema.define(version: 20160428011223) do
   add_index "searches", ["slug"], name: "index_searches_on_slug", unique: true, using: :btree
 
   add_foreign_key "search_locations", "locations"
-  add_foreign_key "search_locations", "searches"
 end

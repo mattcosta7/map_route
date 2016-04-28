@@ -8,7 +8,11 @@ class Location < ActiveRecord::Base
   validates_numericality_of :lng, on: [:create,:update]
   has_many :destinations, class_name: "Search"
   has_many :origins, class_name: "Search"
-
+  before_save :downcase_address
   scope :search, ->(location){where("address LIKE ? ", "%#{location}%")}
   scope :get_searches, -> {collect{|location| location.searches.uniq}}
+
+  def downcase_address
+    self.address = self.address.downcase
+  end
 end

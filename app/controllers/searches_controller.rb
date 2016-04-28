@@ -5,7 +5,7 @@ class SearchesController < ApplicationController
   # GET /searches.json
   def index
     if params[:location]
-      @searches = Search.includes(:locations).search_locations(params[:location].downcase).paginate(page: params[:page], per_page: 6)
+      @searches = Search.includes(:search_locations).includes(:locations).search_locations(params[:location].downcase).paginate(page: params[:page], per_page: 6)
       @subtitle = "Queries Through #{params[:location]}"
     else
       @searches = Search.includes(:search_locations).includes(:locations).paginate(page: params[:page], per_page: 6)
@@ -44,17 +44,11 @@ class SearchesController < ApplicationController
   # POST /searches
   # POST /searches.json
   def create
-    @search = Search.new(search_params)
+    @search = Search.new
+    @search.build_origin
+    @search.build_destination
+    @search.update(search_params)
     if @search.save
-      @search.origin = Location.where(
-        address: params[:search][:origin][:address],
-        lat: params[:search][:origin][:lat],
-        lng: params[:search][:origin][:lng]).first_or_create
-      @search.destination = Location.where(
-        address: params[:search][:destination][:address],
-        lat: params[:search][:destination][:lat],
-        lng: params[:search][:destination][:lng]).first_or_create
-      @search.save
       params[:search][:locations_attributes].each do |location|
         @search.locations << Location.where(
           address: location[1][:address],
@@ -71,16 +65,7 @@ class SearchesController < ApplicationController
   def update
     respond_to do |format|
       if @search.update(search_params)
-        @search.origin = Location.where(
-          address: params[:search][:origin][:address],
-          lat: params[:search][:origin][:lat],
-          lng: params[:search][:origin][:lng]).first_or_create
-        @search.destination = Location.where(
-          address: params[:search][:destination][:address],
-          lat: params[:search][:destination][:lat],
-          lng: params[:search][:destination][:lng]).first_or_create
-        @search.save
-        @search.locations.each{|location| location.destroy}
+        @search.locations.destroy_all
         params[:search][:locations_attributes].each do |location|
           @search.locations.create(
             address: location[1][:address],
@@ -110,11 +95,11 @@ class SearchesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_search
-      @search = Search.includes(:search_locations).includes(:locations).find(params[:id])
+      @search = Search.includes(:locations).find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def search_params
-      params.require(:search).permit(:distance_traveled, :optimize, :origin, :destination)
+      params.require(:search).permit(:distance_traveled, :optimize, {origin_attributes: [:id,:address,:lat,:lng]}, {destination_attributes: [:id,:address,:lat,:lng]} )
     end
 end
