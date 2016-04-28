@@ -16,6 +16,9 @@
   <% else %>
     <p>No Distance Provided In Search</p>
   <%end%>
+  <p>
+    Total Time: <span id='duration'></span> Hours | Total Time Traveled <span id='duration_2'></span> Hours
+  </p>
   <%= link_to 'Edit Search', edit_search_path(@search), class: "waves-effect waves-light btn" %>
   <%= link_to 'New Search', new_search_path, class:"btn waves-effect waves-light modal-trigger grey" %>
   <%= link_to 'All Searches', root_path, class: "waves-effect waves-light btn purple" %>
@@ -31,7 +34,6 @@
   searchWaypoints = <%=raw @search.locations.to_json%>;
   distance = search.distance_traveled;
   optimize = search.optimize;
-
 </script>
 <script src='/javascripts/map.js'></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=<%=Rails.application.secrets.gmaps_key%>&library=geometry,places&callback=initMap"></script>

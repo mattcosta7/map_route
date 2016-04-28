@@ -6,7 +6,9 @@ function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {});
   infowindow = new google.maps.InfoWindow();
   for(var i = 0; i < searchWaypoints.length; i++){
-    waypoints.push({location: new google.maps.LatLng(searchWaypoints[i].lat,searchWaypoints[i].lng), stopover: true});
+    latLngObj = new google.maps.LatLng(searchWaypoints[i].lat,searchWaypoints[i].lng);
+    placeMarker(latLngObj,'waypoint');
+    waypoints.push({location: latLngObj, stopover: true});
   }
   placeMarker(origin,"origin");
   placeMarker(destination,"destination");
@@ -26,10 +28,12 @@ function calculateAndDisplayRoute(origin, destination,distanceTraveled, waypoint
     if (status === google.maps.DirectionsStatus.OK) {
       var totalRouteDistance = 0;
       legs = response.routes[0].legs;
+      var duration = 0;
       for(var z = 0; z<legs.length;z++){
         totalRouteDistance += legs[z].distance.value;
+        duration += legs[z].duration.value;
       }
-      updateDisplay(totalRouteDistance, distanceTraveled);
+      updateDisplay(totalRouteDistance, distanceTraveled, duration/360);
       plotMap(legs, distanceTraveled);
     }
     else {
@@ -66,9 +70,6 @@ function plotMap(legs,distanceTraveled){
   var bounds = new google.maps.LatLngBounds();
   distanceCovered = 0;
   for(i=0;i<legs.length;i++) {
-    if(i < legs.length-1){
-      placeMarker(legs[i].end_location, "WayPoint");
-    }
     var steps = legs[i].steps;
     for (j=0;j<steps.length;j++) {
       var nextPathPart = steps[j].path;
@@ -82,9 +83,7 @@ function plotMap(legs,distanceTraveled){
           }
           else if(distanceCovered < distanceTraveled && distToCover + distanceCovered >= distanceTraveled){
             percentToTravel = (distanceTraveled - distanceCovered) / distToCover;
-
             var interpResult = google.maps.geometry.spherical.interpolate(pathOrigin,pathDestination, percentToTravel);
-
             placeMarker(interpResult, 'point');
             polylineToPoint.getPath().push(interpResult);
             polylineFromPoint.getPath().push(interpResult);
@@ -144,9 +143,10 @@ function placeMarker(location,type){
 }
 
 
-function updateDisplay(totalDist, distanceTraveled){
+function updateDisplay(totalDist, distanceTraveled, duration){
   document.getElementById('distance_placeholder').innerHTML = totalDist;
   document.getElementById('distance_placeholder_2').innerHTML = Math.round(getMiles((totalDist)*10))/10 + " miles";
   document.getElementById('distance_to_travel').innerHTML = totalDist > distanceTraveled ? Math.round((totalDist - distanceTraveled)*10)/10 : 'nil';
   document.getElementById('distance_to_travel_2').innerHTML = (totalDist > distanceTraveled ? (Math.round(getMiles((totalDist - distanceTraveled)*10))/10 + " miles") : "passed your destination, dude");
+  document.getElementById('duration').innerHTML = duration;
 }
